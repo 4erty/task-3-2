@@ -1,3 +1,13 @@
+/**
+ * Функция расчета оптимальной потребляемой мощности умного дома.
+ * @param {Object} input - Объект с входными данными устройст.
+ * @param {Array} input.devices - Массив объектов с параметрами устройств.
+ * @param {Array} input.rates - Массив объектов тарифных ставок по периодам времени.
+ * @param {number} input.maxPower - Максимальная мощность на дискретный период времени (час).
+ * @returns {Object} Возвращает объект с 2 свойствами
+ *                   Object.schedule объект с работой устройств по часам в течении суток
+ *                   Object.consumedEnergy объект с расходами на работу устройств
+ */
 function findMinimalPower(input) {
   // инициализируем ипользуемые переменные
   let hours = [];
@@ -14,7 +24,7 @@ function findMinimalPower(input) {
   if (input.devices === undefined || !Array.isArray(input.devices)) throw new Error('Input data must include array of devices');
   if (input.rates === undefined || !Array.isArray(input.rates)) throw new Error('Input data must include array of rates');
   if (input.rates.length === 0) throw new Error(`Array of rates can't be empty`);
-  
+
   // если устройства пустые, то сразу возвращаем пустой объект
   if (input.devices.length === 0) {
     return {
@@ -22,8 +32,8 @@ function findMinimalPower(input) {
       consumedEnergy: {
         value: 0,
         devices: {},
-      }
-    }
+      },
+    };
   }
 
   // Сортируем входные данные по потребляемой элетроэнергии
@@ -51,7 +61,7 @@ function findMinimalPower(input) {
     let end = 24;
     let minIndex = 0;
     let index = 0;
-    
+
     // Проверяем нет ли уже такого id
     if (consumedEnergy.devices.hasOwnProperty(el.id)) throw new Error(`Device with this id already exist ${el.id}}`);
     consumedEnergy.devices[el.id] = 0;
@@ -65,7 +75,7 @@ function findMinimalPower(input) {
 
     if (el.power > input.maxPower) throw new Error(`Power of ${el.name} - ${el.power} is bigger then Max Power ${input.maxPower}`);
     if (el.duration < 0 || el.duration > 24) throw new Error(`Duration of ${el.name} - ${el.duration} must be in 0 - 24`);
-    
+
     // Если режим работы для устройства установлен, то отсекаем лишние часы
     if (el.mode === 'day') {
       start = 0;
