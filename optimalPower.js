@@ -7,6 +7,25 @@ function findMinimalPower(input) {
   };
   let schedule = {};
 
+  // проверяем, что передали объект
+  if (input === undefined || input === null || typeof input !== 'object') throw new Error('Input data must be an object');
+
+  // проверяем свойства объекта
+  if (input.devices === undefined || !Array.isArray(input.devices)) throw new Error('Input data must include array of devices');
+  if (input.rates === undefined || !Array.isArray(input.rates)) throw new Error('Input data must include array of rates');
+  if (input.rates.length === 0) throw new Error(`Array of rates can't be empty`);
+  
+  // если устройства пустые, то сразу возвращаем пустой объект
+  if (input.devices.length === 0) {
+    return {
+      schedule: [],
+      consumedEnergy: {
+        value: 0,
+        devices: {},
+      }
+    }
+  }
+
   // Сортируем входные данные по потребляемой элетроэнергии
   let sorted = input.devices.sort((a, b)=>a.duration * a.power < b.duration * b.power);
 
@@ -32,9 +51,22 @@ function findMinimalPower(input) {
     let end = 24;
     let minIndex = 0;
     let index = 0;
+    
+    // Проверяем нет ли уже такого id
+    if (consumedEnergy.devices.hasOwnProperty(el.id)) throw new Error(`Device with this id already exist ${el.id}}`);
     consumedEnergy.devices[el.id] = 0;
 
+    // Проверяем данные устройства
+    /*
+      Можно вынести эту часть в отдельную функцию по вылидации входных данных,
+      но по условию задания (соглсано видео от 1 августа) данные должны быть уже отвалидированы
+      но на всякий случаю минимальный набор проверок все же должен ьыть
+    */
 
+    if (el.power > input.maxPower) throw new Error(`Power of ${el.name} - ${el.power} is bigger then Max Power ${input.maxPower}`);
+    if (el.duration < 0 || el.duration > 24) throw new Error(`Duration of ${el.name} - ${el.duration} must be in 0 - 24`);
+    
+    // Если режим работы для устройства установлен, то отсекаем лишние часы
     if (el.mode === 'day') {
       start = 0;
       end = 13;
@@ -57,6 +89,12 @@ function findMinimalPower(input) {
       с использованием встроенных функция обработки массивов JS.
     */
     // minIndex = findMinimumIndex(hours, start, end, el.power);
+
+    // Проверяем нашелся ли свободный диапазон для данного устройства
+    if (minIndex === -1) {
+      console.log(hours);
+      throw new Error(`Power of ${el.name} - ${el.power} is to big for this input data.`);
+    }
 
     /*
       решаем с помощью "жадного" алгоритма

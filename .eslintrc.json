@@ -3,12 +3,9 @@
 		"sourceType": "module",
 		"ecmaVersion": 2018,
 		"ecmaFeatures": {
-			"jsx": true
+			"jsx": false
 		}
 	},
-	"plugins": [
-		"react"
-	],
 	"env": {
 		"amd": true,
 		"browser": true,
@@ -158,8 +155,7 @@
 			2,
 			{ "requireReturn": false }
 		],
-		"yoda": "error",
-		
+		"yoda": "error",	
 		"array-bracket-newline": ["off", "consistent"],
 		"array-bracket-spacing": ["error", "never"],
 		"array-element-newline": ["off", { "multiline": true, "minItems": 3 }],
@@ -400,31 +396,6 @@
 		"switch-colon-spacing": ["error", { "after": true, "before": false }],
 		"template-tag-spacing": ["error", "never"],
 		"unicode-bom": ["error", "never"],
-		"wrap-regex": "off",
-
-		"react/display-name": 2,
-		"react/forbid-prop-types": 1,
-		"react/jsx-boolean-value": 1,
-		"react/jsx-closing-bracket-location": 1,
-		"react/jsx-curly-spacing": 1,
-		"react/jsx-indent-props": [2, "first"],
-		"react/jsx-max-props-per-line": 0,
-		"react/jsx-no-duplicate-props": 1,
-		"react/jsx-no-literals": 0,
-		"react/jsx-no-undef": 1,
-		"react/jsx-sort-props": 0,
-		"react/jsx-uses-react": 1,
-		"react/jsx-uses-vars": 1,
-		"react/no-danger": 1,
-		"react/no-did-mount-set-state": 1,
-		"react/no-did-update-set-state": 1,
-		"react/no-direct-mutation-state": 1,
-		"react/no-multi-comp": 1,
-		"react/no-set-state": 0,
-		"react/no-unknown-property": 1,
-		"react/prop-types":0,
-		"react/react-in-jsx-scope": 0,
-		"react/self-closing-comp": 1,
-		"react/sort-comp": 1
+		"wrap-regex": "off"
 	}
 }
