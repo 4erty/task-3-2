@@ -107,6 +107,13 @@ function findMinimalPower(input) {
     }
 
     /*
+      Если продолжительность работы устройства больше диапазона действия тарифа
+      и не устновлен режим работы (для упрощения алгоритма :( )),
+      то проверяем в какую сторону выгоднее сдвинуть работу устройства
+    */
+    let lastIndex = minIndex + el.duration > hours.length ? minIndex + el.duration - hours.length : minIndex + el.duration;
+    if (el.mode === undefined && hours[lastIndex].value !== hours[minIndex].value) minIndex = findRange(hours, el.power, el.duration, minIndex);
+    /*
       решаем с помощью "жадного" алгоритма
       Самые "потребляющие" устройства выставляем в самые "дешевые" периоды,
       но с учетом режимов "день\ночь"
@@ -148,6 +155,25 @@ function findMinimumIndex(arr, start, end, power) {
     }
   }
   return index;
+}
+
+// проверяем выгодно ли сдвинуть работу утсройства в меньшую сторону
+function findRange(arr, power, duration, minIndex) {
+  let rangeIndex = minIndex;
+  let prevIndex = 0;
+  let nextIndex = 0;
+
+  let minPower = arr[minIndex].value;
+  for (let i = minIndex; i < minIndex + duration; i++) {
+    index = i >= arr.length ? i - arr.length : i;
+    if (arr[index].value > minPower) {
+      prevIndex = rangeIndex > 0 ? rangeIndex - 1 : arr.lenth - 1;
+      nextIndex = rangeIndex + duration > arr.length ? rangeIndex + duration - arr.length : rangeIndex + duration;
+      if (arr[prevIndex].value < arr[nextIndex].value && arr[prevIndex].max >= power) rangeIndex = rangeIndex > 0 ? rangeIndex - 1 : arr.length;
+      else break;
+    }
+  }
+  return rangeIndex;
 }
 
 module.exports = findMinimalPower;

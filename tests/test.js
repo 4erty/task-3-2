@@ -4,6 +4,7 @@ const assert = require('chai').assert;
 const findMinimalPower = require('../optimalPower');
 
 const input = require('../data');
+const { test1, test2 } = require('../tests/test_data');
 const output = findMinimalPower(input);
 
 describe('Проверяем обработку входных данных', function () {
@@ -56,5 +57,17 @@ describe('Проверяем выходные данные с входными �
 
   it('Расходы на работу посудомоечной машины равны 5.10 рублей', function () {
     assert.equal(output.consumedEnergy.devices['F972B82BA56A70CC579945773B6866FB'], 5.1015);
+  });
+});
+
+const test1Output = findMinimalPower(test1);
+const test2Output = findMinimalPower(test2);
+
+describe('Проверяем выходные данные с тестовыми данными', function () {
+  it('Общий расход на электроэнергию в test1 равен 24.58 рублей', function () {
+    assert.equal(test1Output.consumedEnergy.value.toFixed(2), 24.58);
+  });
+  it('Расходы на работу кондиционера из test2 равны 19.7 рублей', function () {
+    assert.equal(test2Output.consumedEnergy.devices['7D9DC84AD110500D284B33C82FE6E85E'].toFixed(2), 19.7);
   });
 });
